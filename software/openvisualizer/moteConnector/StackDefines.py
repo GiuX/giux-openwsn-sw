@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Wed, 05 Jun 2013 14:34:35
+# on Fri, 07 Jun 2013 21:24:13
 #
 
 components = {
@@ -54,6 +54,7 @@ components = {
   47: "UDPLATENCY",
   48: "TEST",
   49: "R6TUS",
+  50: "NETLATENCY",
 }
 
 errorDescriptions = {
@@ -110,4 +111,5 @@ errorDescriptions = {
   51: "booted",
   52: "invalid serial frame",
   53: "invalid packet frome radio, length {1} (code location {0})",
+  54: "netlatency {1} (seq num {0})",
 }

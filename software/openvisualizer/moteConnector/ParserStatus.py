@@ -198,6 +198,15 @@ class ParserStatus(Parser.Parser):
                                         'asn_0_1',                   # H
                                     ],
                                 )
+        self._addFieldsParser   (
+                                    3,
+                                    10,
+                                    'NetLatency',
+                                    '<B',
+                                    [
+                                        'SN' ,               # H my
+                                    ],
+                                )				    
     
     #======================== public ==========================================
     

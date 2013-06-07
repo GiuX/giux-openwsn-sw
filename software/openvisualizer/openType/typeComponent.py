@@ -69,7 +69,8 @@ class typeComponent(openType.openType):
     COMPONENT_UDPSTORM                  = 0x2e
     COMPONENT_UDPLATENCY                = 0x2f
     COMPONENT_TEST                      = 0x30
-    
+    COMPONENT_NETLATENCY                = 0x32
+
     def __init__(self):
         # log
         log.debug("creating object")
@@ -191,6 +192,8 @@ class typeComponent(openType.openType):
             self.desc = 'UDPSTORM'
         elif type==self.COMPONENT_UDPLATENCY:
             self.desc = 'UDPLATENCY'
+        elif type==self.COMPONENT_NETLATENCY:
+            self.desc = 'NETLATENCY'
         elif type==self.COMPONENT_TEST:
             self.desc = 'TEST'
         else:

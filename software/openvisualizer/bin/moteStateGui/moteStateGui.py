@@ -102,6 +102,9 @@ class MoteStateGui(object):
                 [
                     moteState.moteState.ST_NEIGHBORS,
                 ],
+                [
+                    moteState.moteState.ST_NETLATENCY, #MY
+                ],
             ]
             for row in range(len(frameOrganization)):
                 tempRowFrame = Tkinter.Frame(thisFrame)

@@ -284,6 +284,14 @@ class StateMyDagRank(StateElem):
             self.data.append({})
         self.data[0]['myDAGrank']           = notif.myDAGrank
 
+class StateNetLatency(StateElem): # MY
+    
+    def update(self,notif):
+        StateElem.update(self)
+        if len(self.data)==0:
+            self.data.append({})
+        self.data[0]['SN']           = notif.SN
+
 class StateTable(StateElem):
 
     def __init__(self,rowClass,columnOrder=None):
@@ -314,6 +322,7 @@ class moteState(eventBusClient.eventBusClient):
     ST_ISSYNC           = 'IsSync'
     ST_IDMANAGER        = 'IdManager'
     ST_MYDAGRANK        = 'MyDagRank'
+    ST_NETLATENCY       = 'NetLatency' # MY
     ST_ALL              = [
         ST_OUPUTBUFFER,
         ST_ASN,
@@ -323,9 +332,10 @@ class moteState(eventBusClient.eventBusClient):
         ST_QUEUE,
         ST_NEIGHBORS,
         ST_ISSYNC,
-        ST_IDMANAGER, 
+        ST_IDMANAGER,
         ST_MYDAGRANK,
-    ]
+        ST_NETLATENCY, # MY
+        ]
     
     TRIGGER_DAGROOT     = 'DAGroot'
     TRIGGER_ALL         = [
@@ -391,6 +401,7 @@ class moteState(eventBusClient.eventBusClient):
                                                 self.moteConnector
                                               )
         self.state[self.ST_MYDAGRANK]       = StateMyDagRank()
+        self.state[self.ST_NETLATENCY]      = StateNetLatency() # MY
         
         self.notifHandlers = {
             self.parserStatus.named_tuple[self.ST_OUPUTBUFFER]:
@@ -413,6 +424,8 @@ class moteState(eventBusClient.eventBusClient):
                 self.state[self.ST_IDMANAGER].update,
             self.parserStatus.named_tuple[self.ST_MYDAGRANK]:
                 self.state[self.ST_MYDAGRANK].update,
+            self.parserStatus.named_tuple[self.ST_NETLATENCY]: # MY
+                self.state[self.ST_NETLATENCY].update,
         
         }
               # initialize parent class
