@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Fri, 07 Jun 2013 21:24:13
+# on Wed, 12 Jun 2013 23:46:23
 #
 
 components = {
@@ -111,5 +111,6 @@ errorDescriptions = {
   51: "booted",
   52: "invalid serial frame",
   53: "invalid packet frome radio, length {1} (code location {0})",
-  54: "netlatency {1} (seq num {0})",
+  54: "busy receiving when stop of serial activity, buffer input length {1} (code location {0})",
+  55: "netlatency {1} (seq num {0})",
 }
