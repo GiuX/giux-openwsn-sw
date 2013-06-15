@@ -118,7 +118,7 @@ class moteProbe(threading.Thread):
             self._bufferDataToSend,
             signal = 'fromMoteConnector@'+self.serialport,
         )
-        
+    
         # start myself
         self.start()
     
@@ -138,7 +138,7 @@ class moteProbe(threading.Thread):
                     self.serial = self.emulatedMote.bspUart
                 while True: # read bytes from serial port
                     try:
-                        rxByte = self.serial.read(1)
+                        rxByte = self.serial.read(1)                        
                     except Exception as err:
                         print err
                         log.warning(err)
@@ -192,6 +192,7 @@ class moteProbe(threading.Thread):
                                     )
                         
                         self.lastRxByte = rxByte
+                                          
                     if not self.realserial:
                         rxByte = self.serial.doneReading()
         except Exception as err:
