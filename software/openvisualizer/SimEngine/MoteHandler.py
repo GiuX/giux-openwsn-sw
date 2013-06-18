@@ -21,7 +21,7 @@ from BspEmulator import HwCrystal
 #============================ get notification IDs ============================
 import re
 
-f = open(os.path.join('..','..','..','..','..','openwsn-fw','firmware','openos','bsp','boards','python','openwsnmodule_obj.h'))
+f = open(os.path.join('..','..','..','..','..','giux-openwsn-fw','firmware','openos','bsp','boards','python','openwsnmodule_obj.h'))
 lines = f.readlines()
 f.close()
 

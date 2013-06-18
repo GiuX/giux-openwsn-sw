@@ -12,7 +12,7 @@ if __name__=='__main__':
     # openvisualizer/
     sys.path.insert(0, os.path.join(here, '..', '..'))
     # location of openwsn module
-    sys.path.insert(0, os.path.join(here, '..', '..', '..', '..', '..', 'openwsn-fw', 'firmware','openos','projects','common'))
+    sys.path.insert(0, os.path.join(here, '..', '..', '..', '..', '..', 'giux-openwsn-fw', 'firmware','openos','projects','common'))
 
 import logging
 import logging.handlers
