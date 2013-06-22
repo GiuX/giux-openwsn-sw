@@ -188,11 +188,12 @@ class OpenVisualizerGui(object):
     
 class OpenVisualizerGui_app(object):
     
-    def __init__(self,simulatorMode,numMotes):
+    def __init__(self,simulatorMode,numMotes,trace):
         
         # store params
         self.simulatorMode        = simulatorMode
         self.numMotes             = numMotes
+        self.trace                = trace 
         
         # local variables
         self.eventBusMonitor      = eventBusMonitor.eventBusMonitor()
@@ -255,9 +256,16 @@ class OpenVisualizerGui_app(object):
                 )
             self.simengine.resume()
         
+        # start tracing threads
+        if self.trace:
+            import OVtracer
+            appDir = '.'
+            logging.config.fileConfig(os.path.join(appDir,'trace.conf'), {'logDir': appDir})
+            OVtracer.OVtracer()
         # start the GUI
         gui.start()
     
+       
     #======================== GUI callbacks ===================================
 
 #============================ main ============================================
@@ -277,14 +285,20 @@ def parseCliOptions():
         default    = 3,
     )
     
+    parser.add_option( '--trace','-t',
+        dest       = 'trace',
+        default    = False,
+        action     = 'store_true',
+    )
+    
     (opts, args)  = parser.parse_args()
     
     return opts
 
-def main(simulatorMode,numMotes):
+def main(simulatorMode,numMotes,trace):
     appDir = '.'
     logging.config.fileConfig(os.path.join(appDir,'logging.conf'), {'logDir': appDir})
-    app = OpenVisualizerGui_app(simulatorMode,numMotes)
+    app = OpenVisualizerGui_app(simulatorMode,numMotes,trace)
 
 if __name__=="__main__":
     
@@ -294,4 +308,5 @@ if __name__=="__main__":
     main(
         simulatorMode   = args['simulatorMode'],
         numMotes        = args['numMotes'],
+        trace           = args['trace'],
     )
