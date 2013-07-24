@@ -9,6 +9,13 @@ if __name__=='__main__':
     sys.path.insert(0, os.path.join(here, '..', '..', '..', '..', '..', 'giux-openwsn-fw', 'firmware','openos','projects','common'))
 
 import logging
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+log = logging.getLogger('openVisualizerGui')
+log.setLevel(logging.ERROR)
+log.addHandler(NullHandler())
+
 import logging.config
 
 from optparse import OptionParser
@@ -27,6 +34,7 @@ import OpenFrameState
 import OpenFrameButton
 import OpenFrameLbr
 import OpenFrameEventBus
+import openvisualizer_utils as u
 from SimEngine import SimEngine, \
                       MoteHandler
 from openCli   import SimCli
@@ -57,27 +65,18 @@ class OpenVisualizerGui(object):
     MENUENTRY_LBR          = 'lbr'
     MENUENTRY_EVENTBUS     = 'eventBus'
     
-    def __init__(self,eventBusMonitor,
-                      moteProbes,
-                      moteConnectors,
-                      moteStates,
-                      openLbr):
+    def __init__(self,app):
         
         # store params
-        self.eventBusMonitor        = eventBusMonitor
-        self.moteProbes             = moteProbes
-        self.moteConnectors         = moteConnectors
-        self.moteStates             = moteStates
-        self.openLbr                = openLbr
-        self.menuFrames             = []
+        self.app                    = app
         
         # local variables
-        self.window                 = OpenWindow.OpenWindow("OpenVisualizer")
+        self.window                 = OpenWindow.OpenWindow("OpenVisualizer", self)
         
         #===== mote states frame
         menuNames                   = []
         self.menuFrames             = []
-        for ms in self.moteStates:
+        for ms in self.app.moteStates:
             thisFrame               = MenuUpdateFrame(self.window)
             thisFrame.setMoteStateHandler(ms)
             frameOrganization = [
@@ -164,7 +163,7 @@ class OpenVisualizerGui(object):
         
         tempFrameEventBus    = OpenFrameEventBus.OpenFrameEventBus(
             thisFrame,
-            self.eventBusMonitor,
+            self.app.eventBusMonitor,
             row=1
         )
         tempFrameEventBus.show()
@@ -179,6 +178,9 @@ class OpenVisualizerGui(object):
     
     def start(self):
         self.window.startGui()
+        
+    def close(self):
+        self.app.close()
     
     #======================== private =========================================
     
@@ -201,7 +203,7 @@ class OpenVisualizerGui_app(object):
         self.rpl                  = RPL.RPL()
         self.topology             = topology.topology()
         self.udpLatency           = UDPLatency.UDPLatency()
-        self.openTun              = openTun.OpenTun() # call last since indicates prefix
+        self.openTun              = openTun.create() # call last since indicates prefix
         if self.simulatorMode:
             self.simengine        = SimEngine.SimEngine()
             self.simengine.start()
@@ -234,13 +236,7 @@ class OpenVisualizerGui_app(object):
         ]
         
         # create an open GUI
-        gui = OpenVisualizerGui(
-            self.eventBusMonitor,
-            self.moteProbes,
-            self.moteConnectors,
-            self.moteStates,
-            self.openLbr,
-        )
+        gui = OpenVisualizerGui(self)
         
         # boot all emulated motes, if applicable
         if self.simulatorMode:
@@ -264,6 +260,17 @@ class OpenVisualizerGui_app(object):
             OVtracer.OVtracer()
         # start the GUI
         gui.start()
+        
+    #======================== public ==========================================
+    
+    def close(self):
+        '''Closes all thread-based components'''
+        
+        log.info('Closing OpenVisualizer')
+        self.openTun.close()
+        self.rpl.close()
+        for probe in self.moteProbes:
+            probe.close()
     
        
     #======================== GUI callbacks ===================================
@@ -282,6 +289,7 @@ def parseCliOptions():
     
     parser.add_option( '-n',
         dest       = 'numMotes',
+        type       = 'int',
         default    = 3,
     )
     
@@ -293,7 +301,7 @@ def parseCliOptions():
     
     (opts, args)  = parser.parse_args()
     
-    return opts
+    return opts.__dict__
 
 def main(simulatorMode,numMotes,trace):
     appDir = '.'
@@ -302,8 +310,7 @@ def main(simulatorMode,numMotes,trace):
 
 if __name__=="__main__":
     
-    opts = parseCliOptions()
-    args = opts.__dict__
+    args = parseCliOptions()
     
     main(
         simulatorMode   = args['simulatorMode'],
