@@ -207,6 +207,7 @@ class StateNeighborsRow(StateElem):
         self.data[0]['numRx']                    = notif.numRx
         self.data[0]['numTx']                    = notif.numTx
         self.data[0]['numTxACK']                 = notif.numTxACK
+        self.data[0]['numKA']                    = notif.numKA                       # my
         self.data[0]['numWraps']                 = notif.numWraps
         if 'asn' not in self.data[0]:
             self.data[0]['asn']                  = typeAsn.typeAsn()
@@ -381,6 +382,7 @@ class moteState(eventBusClient.eventBusClient):
                                                         'numRx',
                                                         'numTx',
                                                         'numTxACK',
+                                                        'numKA',                       # my
                                                         'numWraps',
                                                         'asn',
                                                     ]
