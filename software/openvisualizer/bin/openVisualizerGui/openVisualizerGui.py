@@ -81,6 +81,9 @@ class OpenVisualizerGui(object):
             thisFrame.setMoteStateHandler(ms)
             frameOrganization = [
                 [
+                    moteState.moteState.ST_ASNSYNCH,       # stamp the number of slot for synch time
+                ],
+                [
                     moteState.moteState.ST_ISSYNC,
                     moteState.moteState.ST_ASN,
                     moteState.moteState.ST_MYDAGRANK,

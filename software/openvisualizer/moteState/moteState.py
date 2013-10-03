@@ -102,6 +102,18 @@ class StateAsn(StateElem):
                                    notif.asn_2_3,
                                    notif.asn_4)
 
+class StateAsnSynch(StateElem):                                       # my
+    
+    def update(self,notif):
+        StateElem.update(self)
+        if len(self.data)==0:
+            self.data.append({})
+        if 'asnsynch' not in self.data[0]:
+            self.data[0]['asnsynch']        = typeAsn.typeAsn()
+        self.data[0]['asnsynch'].update(notif.asn_0_1,
+                                        notif.asn_2_3,
+                                        notif.asn_4)
+
 class StateMacStats(StateElem):
     
     def update(self,notif):
@@ -304,6 +316,7 @@ class moteState(eventBusClient.eventBusClient):
     
     ST_OUPUTBUFFER      = 'OutputBuffer'
     ST_ASN              = 'Asn'
+    ST_ASNSYNCH         = 'AsnSynch'                       # my
     ST_MACSTATS         = 'MacStats'
     ST_SCHEDULEROW      = 'ScheduleRow'
     ST_SCHEDULE         = 'Schedule'
@@ -318,6 +331,7 @@ class moteState(eventBusClient.eventBusClient):
     ST_ALL              = [
         ST_OUPUTBUFFER,
         ST_ASN,
+        ST_ASNSYNCH,                       # my
         ST_MACSTATS,
         ST_SCHEDULE,
         ST_BACKOFF,
@@ -349,6 +363,7 @@ class moteState(eventBusClient.eventBusClient):
         
         self.state[self.ST_OUPUTBUFFER]     = StateOutputBuffer()
         self.state[self.ST_ASN]             = StateAsn()
+        self.state[self.ST_ASNSYNCH]        = StateAsnSynch()
         self.state[self.ST_MACSTATS]        = StateMacStats()
         self.state[self.ST_SCHEDULE]        = StateTable(
                                                 StateScheduleRow,
@@ -399,6 +414,8 @@ class moteState(eventBusClient.eventBusClient):
                 self.state[self.ST_OUPUTBUFFER].update,
             self.parserStatus.named_tuple[self.ST_ASN]:
                 self.state[self.ST_ASN].update,
+            self.parserStatus.named_tuple[self.ST_ASNSYNCH]:                       # my
+                self.state[self.ST_ASNSYNCH].update,                               # my
             self.parserStatus.named_tuple[self.ST_MACSTATS]:
                 self.state[self.ST_MACSTATS].update,
             self.parserStatus.named_tuple[self.ST_SCHEDULEROW]:

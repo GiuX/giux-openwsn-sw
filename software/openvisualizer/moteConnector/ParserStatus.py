@@ -101,6 +101,17 @@ class ParserStatus(Parser.Parser):
                                 )
         self._addFieldsParser   (
                                     3,
+                                    10,
+                                    'AsnSynch',
+                                    '<BHH',
+                                    [
+                                        'asn_4',                     # B
+                                        'asn_2_3',                   # H
+                                        'asn_0_1',                   # H
+                                    ],
+                                )
+        self._addFieldsParser   (
+                                    3,
                                     5,
                                     'MacStats',
                                     '<BBhhBf',
