@@ -105,9 +105,9 @@ class ParserStatus(Parser.Parser):
                                     'AsnSynch',
                                     '<BHH',
                                     [
-                                        'asn_4',                     # B
-                                        'asn_2_3',                   # H
-                                        'asn_0_1',                   # H
+                                        'asnSynch_4',                     # B
+                                        'asnSynch_2_3',                   # H
+                                        'asnSynch_0_1',                   # H
                                     ],
                                 )
         self._addFieldsParser   (

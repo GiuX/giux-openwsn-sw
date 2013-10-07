@@ -110,9 +110,9 @@ class StateAsnSynch(StateElem):                                       # my
             self.data.append({})
         if 'asnsynch' not in self.data[0]:
             self.data[0]['asnsynch']        = typeAsn.typeAsn()
-        self.data[0]['asnsynch'].update(notif.asn_0_1,
-                                        notif.asn_2_3,
-                                        notif.asn_4)
+        self.data[0]['asnsynch'].update(notif.asnSynch_0_1,
+                                        notif.asnSynch_2_3,
+                                        notif.asnSynch_4)
 
 class StateMacStats(StateElem):
     
