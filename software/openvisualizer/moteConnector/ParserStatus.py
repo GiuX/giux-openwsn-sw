@@ -262,6 +262,23 @@ class ParserStatus(Parser.Parser):
                 # log
                 log.debug("parsed into {0}".format(returnTuple))
                 
+#======================= asn synchronization time log ========================
+                if key.name=='AsnSynch':
+		    from openType import typeAsn
+		    
+		    asnSynch = typeAsn.typeAsn()
+		    asnSynch.update(
+		                    u.buf2int([input[4], input[3]]),
+		                    u.buf2int([input[2], input[1]]),
+		                    input[0]
+		                    )
+		    
+		    # log asn in exadecimal format
+		    log.info("moteId {0}: synchronization time {1}".format(u.formatAddr(headerBytes[:2]), asnSynch))
+		    # log asn in decimal format
+                    log.info("moteId {0}: synchronization time {1}".format(u.formatAddr(headerBytes[:2]), u.buf2int(asnSynch.asn)))
+#=============================================================================
+
                 # map to name tuple
                 return ('status',returnTuple)
         
