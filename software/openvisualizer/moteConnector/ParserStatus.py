@@ -101,6 +101,17 @@ class ParserStatus(Parser.Parser):
                                 )
         self._addFieldsParser   (
                                     3,
+                                    10,
+                                    'AsnSynch',
+                                    '<BHH',
+                                    [
+                                        'asnSynch_4',                     # B
+                                        'asnSynch_2_3',                   # H
+                                        'asnSynch_0_1',                   # H
+                                    ],
+                                )
+        self._addFieldsParser   (
+                                    3,
                                     5,
                                     'MacStats',
                                     '<BBhhBf',
@@ -177,7 +188,7 @@ class ParserStatus(Parser.Parser):
                                     3,
                                     9,
                                     'NeighborsRow',
-                                    '<BBBBBBQQHbBBBBBHH',
+                                    '<BBBBBBQQHbBBBBBBHH',
                                     [
                                         'row',                       # B
                                         'used',                      # B
@@ -192,6 +203,7 @@ class ParserStatus(Parser.Parser):
                                         'numRx',                     # B
                                         'numTx',                     # B
                                         'numTxACK',                  # B
+                                        'numKA',                     # B         my, check up
                                         'numWraps',                  # B
                                         'asn_4',                     # B
                                         'asn_2_3',                   # H
@@ -250,6 +262,23 @@ class ParserStatus(Parser.Parser):
                 # log
                 log.debug("parsed into {0}".format(returnTuple))
                 
+#======================= asn synchronization time log ========================
+                if key.name=='AsnSynch':
+		    from openType import typeAsn
+		    
+		    asnSynch = typeAsn.typeAsn()
+		    asnSynch.update(
+		                    u.buf2int([input[4], input[3]]),
+		                    u.buf2int([input[2], input[1]]),
+		                    input[0]
+		                    )
+		    
+		    # log asn in exadecimal format
+		    log.info("moteId {0}: synchronization time {1}".format(u.formatAddr(headerBytes[:2]), asnSynch))
+		    # log asn in decimal format
+                    log.info("moteId {0}: synchronization time {1}".format(u.formatAddr(headerBytes[:2]), u.buf2int(asnSynch.asn)))
+#=============================================================================
+
                 # map to name tuple
                 return ('status',returnTuple)
         
